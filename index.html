@@ -18,7 +18,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang 
 .card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:pointer}
 .card .num{position:absolute;top:6px;left:6px;background:var(--accent);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
 .card .cap{padding:8px 12px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;border-top:1px solid var(--border)}
-.card .acts{position:absolute;top:6px;right:6px;display:none;gap:4px}
+.card .acts{display:none!important}
 .card:hover .acts{display:flex}
 .card .acts button{width:28px;height:28px;border:none;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff}
 .card .acts .ed{background:var(--accent)}.card .acts .del{background:var(--danger)}
@@ -52,8 +52,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang 
 </head>
 <body>
 <div class="hd">
-  <span class="atitle" id="atitle" onclick="renameAlbum()">课件共享</span>
-  <button class="btn-up" onclick="toggleUp()">＋ 上传</button>
+  <span class="atitle" id="atitle" onclick="return false" style="cursor:default;border:none"">课件共享</span>
+  <button class="btn-up" style="display:none">＋ 上传</button>
 </div>
 <div class="up-panel" id="upP">
   <div class="up-box" id="upBox" onclick="fileIn.click()">
@@ -88,7 +88,7 @@ function render(){
   document.getElementById('emP').style.display='none';
   items.forEach(function(s,i){
     var d=document.createElement('div');d.className='card';
-    d.innerHTML='<span class="num">'+(i+1)+'</span><div class="acts"><button class="ed" onclick="editTitle('+s.id+',event)">✏</button><button class="del" onclick="delSlide('+s.id+',event)">✕</button></div><img src="/uploads/'+s.filename+'" loading="lazy" onclick="openM('+i+')"><div class="cap" onclick="editTitle('+s.id+',event)">'+esc(s.title)+'</div>';
+    d.innerHTML='<span class="num">'+(i+1)+'</span><div class="acts"><button class="ed" onclick="return false" style="cursor:default" '+s.id+',event)">✏</button><button class="del" onclick="return false" '+s.id+',event)">✕</button></div><img src="/slides/'+s.filename+'" loading="lazy" onclick="openM('+i+')"><div class="cap" onclick="return false" style="cursor:default" '+s.id+',event)">'+esc(s.title)+'</div>';
     g.appendChild(d);
   });
 }
@@ -100,7 +100,7 @@ async function delSlide(id,ev){ev.stopPropagation();if(!confirm('确定删除这
 function openM(i){cur=i;showM();document.getElementById('modal').classList.add('on')}
 function closeM(){document.getElementById('modal').classList.remove('on')}
 function nav(d){cur=(cur+d+items.length)%items.length;showM()}
-function showM(){var s=items[cur];document.getElementById('mImg').src='/uploads/'+s.filename;document.getElementById('mInfo').textContent=(s.title?s.title+' · ':'')+(cur+1)+'/'+items.length}
+function showM(){var s=items[cur];document.getElementById('mImg').src='/slides/'+s.filename;document.getElementById('mInfo').textContent=(s.title?s.title+' · ':'')+(cur+1)+'/'+items.length}
 document.onkeydown=function(e){if(!document.getElementById('modal').classList.contains('on'))return;if(e.key==='Escape')closeM();if(e.key==='ArrowLeft')nav(-1);if(e.key==='ArrowRight')nav(1)};
 document.getElementById('modal').onclick=function(e){if(e.target.id==='modal')closeM()};
 
