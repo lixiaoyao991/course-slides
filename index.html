@@ -3,27 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>课件</title>
+<title>课件共享</title>
 <style>
+:root{--bg:#f8f9fc;--card:#fff;--border:#e8ecf2;--text:#2c3e50;--sub:#8896a7;--accent:#5b7fff;--accent2:#43d9ad;--danger:#ff6b6b;--radius:14px;--shadow:0 2px 12px rgba(92,127,255,.08)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#1a1d23;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
-.h{padding:12px 16px;border-bottom:1px solid #282c34;display:flex;justify-content:space-between;align-items:center}
-.h span{font-size:15px;font-weight:600}
-.h small{color:#6b7280;font-size:12px}
-.empty{padding:60px 20px;text-align:center;color:#6b7280;line-height:2;font-size:14px}
-.view{padding:12px;text-align:center}
-.view img{max-width:95vw;max-height:82vh;border-radius:4px}
-.bar{padding:10px;display:flex;justify-content:center;align-items:center;gap:10px}
-.bar button{padding:7px 16px;border:none;border-radius:6px;font-size:13px;cursor:pointer}
-.b1{background:#282c34;color:#e8eaed}.b2{background:#3b82f6;color:#fff}
-.b1:hover{background:#3a3f4a}.b2:hover{background:#2563eb}
-.ct{color:#6b7280;font-size:12px;min-width:60px}
-.grid{padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-.g-item{position:relative;border-radius:6px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:#232730}
-.g-item img{width:100%;height:100%;object-fit:cover}
-.g-item .n{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:1px 5px;border-radius:8px}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;min-height:100vh}
+.hd{padding:18px 24px;background:linear-gradient(135deg,#5b7fff,#43d9ad);color:#fff;display:flex;align-items:center;gap:12px}
+.hd .atitle{font-size:18px;font-weight:700;cursor:pointer;border-bottom:1px dashed rgba(255,255,255,.4);padding-bottom:1px}
+.hd .atitle:hover{border-bottom-color:#fff}
+.hd .btn-up{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 18px;border-radius:20px;font-size:13px;cursor:pointer;margin-left:auto}
+.grid{padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;max-width:1100px;margin:0 auto}
+.card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;transition:transform .12s}
+.card:hover{transform:translateY(-2px)}
+.card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:pointer}
+.card .num{position:absolute;top:6px;left:6px;background:var(--accent);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.card .cap{padding:8px 12px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;border-top:1px solid var(--border)}
+.card .acts{position:absolute;top:6px;right:6px;display:none;gap:4px}
+.card:hover .acts{display:flex}
+.card .acts button{width:28px;height:28px;border:none;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff}
+.card .acts .ed{background:var(--accent)}.card .acts .del{background:var(--danger)}
+.empty{text-align:center;padding:60px 20px;color:var(--sub);line-height:1.8;font-size:14px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.on{display:flex}
+.modal img{max-width:92vw;max-height:85vh;border-radius:8px}
+.modal .x{position:fixed;top:16px;right:20px;font-size:28px;color:#fff;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.1)}
+.modal .arr{position:fixed;top:50%;transform:translateY(-50%);font-size:38px;color:#fff;cursor:pointer;opacity:.6;padding:0 16px}
+.modal .arr:hover{opacity:1}.modal .arr.l{left:0}.modal .arr.r{right:0}
+.modal .info{position:fixed;bottom:18px;left:0;right:0;text-align:center;color:#ccc;font-size:13px}
+.up-panel{display:none;max-width:520px;margin:0 auto;padding:20px}
+.up-panel.on{display:block}
+.up-box{background:var(--card);border-radius:var(--radius);border:2px dashed var(--border);padding:28px;text-align:center;cursor:pointer;transition:.2s}
+.up-box:hover{border-color:var(--accent);background:rgba(91,127,255,.04)}
+.up-box input{display:none}
+.up-box p{color:var(--sub);font-size:14px;line-height:1.6}
+.up-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.up-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 12px}
+.up-item img{width:48px;height:48px;object-fit:cover;border-radius:8px}
+.up-item input{flex:1;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);font-size:13px;color:var(--text)}
+.up-item .rm{color:var(--danger);cursor:pointer;font-size:12px;padding:4px 8px;border-radius:6px}
+.up-actions{margin-top:14px;display:flex;gap:10px;justify-content:center}
+.up-actions button{padding:10px 22px;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:.15s}
+.up-actions .go{background:var(--accent);color:#fff}
+.up-actions .no{background:var(--border);color:var(--sub)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:10px;font-size:14px;color:#fff;z-index:200;opacity:0;transition:.3s}
+.toast.ok{background:var(--accent2);opacity:1}
+.toast.err{background:var(--danger);opacity:1}
 </style>
 </head>
 <body>
-<div class="h"><span>📖 课件</span><small id="info"></small></div>
-<div class="grid" id="grid"><div class="g-item" onclick="v(0)"><span class="n">1</span><img src="slides/01.jpg" loading="lazy"></div><div class="g-item" onclick="v(1)"><span class="n">2</span><img src="slides/02.jpg" loading="lazy"></div><div class="g-item" onclick="v(2)"><span class="n">3</span><img src="slides/03.jpg" loading="lazy"></div><div class="g-item" onclick="v(3)"><span class="n">4</span><img src="slides/04.jpg" loading="lazy"></div><div class="g-item" onclick="v(4)"><span class="n">5</span><img src="slides/05.jpg" loading="lazy"></div></div><div class="view" id="big" style="display:none"><img id="im"></div><div class="bar" id="bar" style="display:none"><button class="b1" onclick="g(-1)">← 上页</button><span class="ct" id="ct"></span><button class="b2" onclick="g(1)">下页 →</button><button class="b1" onclick="grid()">目录</button></div><script>var L=["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg"],c=0;document.getElementById("info").textContent=L.length+"页";function v(i){c=i;sh();document.getElementById("grid").style.display="none";document.getElementById("big").style.display="";document.getElementById("bar").style.display=""}function g(d){c=(c+d+L.length)%L.length;sh()}function sh(){document.getElementById("im").src="slides/"+L[c];document.getElementById("ct").textContent=(c+1)+"/"+L.length}function grid(){document.getElementById("grid").style.display="";document.getElementById("big").style.display="none";document.getElementById("bar").style.display="none"}document.onkeydown=function(e){if(document.getElementById("big").style.display==="none")return;if(e.key==="Escape")grid();if(e.key==="ArrowLeft")g(-1);if(e.key==="ArrowRight")g(1)};</script></body></html>
+<div class="hd">
+  <span class="atitle" id="atitle" onclick="renameAlbum()">课件共享</span>
+  <button class="btn-up" onclick="toggleUp()">＋ 上传</button>
+</div>
+<div class="up-panel" id="upP">
+  <div class="up-box" id="upBox" onclick="fileIn.click()">
+    <p>点击选择图片 或 拖到这里<br>支持多选，按选择顺序排列</p>
+    <input id="fileIn" type="file" accept="image/*" multiple>
+  </div>
+  <div class="up-list" id="upList"></div>
+  <div class="up-actions">
+    <button class="go" onclick="doUpload()">确认上传</button>
+    <button class="no" onclick="toggleUp()">取消</button>
+  </div>
+</div>
+<div class="grid" id="gView"></div>
+<div class="empty" id="emP">还没有课件，点击右上角「＋ 上传」添加</div>
+<div class="modal" id="modal">
+  <span class="x" onclick="closeM()">×</span>
+  <span class="arr l" onclick="nav(-1)">‹</span>
+  <img id="mImg">
+  <span class="arr r" onclick="nav(1)">›</span>
+  <div class="info" id="mInfo"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var items=[],cur=0,queue=[];
+
+async function load(){var r=await fetch('/api/list');items=await r.json();render()}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function render(){
+  var g=document.getElementById('gView');g.innerHTML='';
+  if(!items.length){document.getElementById('emP').style.display='block';return;}
+  document.getElementById('emP').style.display='none';
+  items.forEach(function(s,i){
+    var d=document.createElement('div');d.className='card';
+    d.innerHTML='<span class="num">'+(i+1)+'</span><div class="acts"><button class="ed" onclick="editTitle('+s.id+',event)">✏</button><button class="del" onclick="delSlide('+s.id+',event)">✕</button></div><img src="/uploads/'+s.filename+'" loading="lazy" onclick="openM('+i+')"><div class="cap" onclick="editTitle('+s.id+',event)">'+esc(s.title)+'</div>';
+    g.appendChild(d);
+  });
+}
+
+async function renameAlbum(){var n=prompt('重命名课件标题：',document.getElementById('atitle').textContent);if(!n)return;var r=await fetch('/api/album_title',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:n})});await r.json();location.reload()}
+async function editTitle(id,ev){ev.stopPropagation();var it=items.find(function(x){return x.id===id});if(!it)return;var n=prompt('修改标题：',it.title||'');if(n===null)return;await fetch('/api/rename/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:n})});location.reload()}
+async function delSlide(id,ev){ev.stopPropagation();if(!confirm('确定删除这张课件？'))return;await fetch('/api/delete/'+id,{method:'DELETE'});location.reload();closeM()}
+
+function openM(i){cur=i;showM();document.getElementById('modal').classList.add('on')}
+function closeM(){document.getElementById('modal').classList.remove('on')}
+function nav(d){cur=(cur+d+items.length)%items.length;showM()}
+function showM(){var s=items[cur];document.getElementById('mImg').src='/uploads/'+s.filename;document.getElementById('mInfo').textContent=(s.title?s.title+' · ':'')+(cur+1)+'/'+items.length}
+document.onkeydown=function(e){if(!document.getElementById('modal').classList.contains('on'))return;if(e.key==='Escape')closeM();if(e.key==='ArrowLeft')nav(-1);if(e.key==='ArrowRight')nav(1)};
+document.getElementById('modal').onclick=function(e){if(e.target.id==='modal')closeM()};
+
+function toggleUp(){document.getElementById('upP').classList.toggle('on')}
+var upBox=document.getElementById('upBox'),fileIn=document.getElementById('fileIn');
+upBox.addEventListener('dragover',function(ev){ev.preventDefault();upBox.style.borderColor='var(--accent)'});
+upBox.addEventListener('dragleave',function(ev){ev.preventDefault();upBox.style.borderColor='var(--border)'});
+upBox.addEventListener('drop',function(ev){ev.preventDefault();upBox.style.borderColor='var(--border)';addF(ev.dataTransfer.files)});
+fileIn.addEventListener('change',function(){addF(fileIn.files)});
+function addF(fl){for(var k=0;k<fl.length;k++){var f=fl[k];if(!f.type.startsWith('image/'))continue;queue.push({file:f,title:'',url:URL.createObjectURL(f)})}renderQ();fileIn.value=''}
+function renderQ(){var l=document.getElementById('upList');l.innerHTML='';queue.forEach(function(it,i){var d=document.createElement('div');d.className='up-item';d.innerHTML='<img src="'+it.url+'"><input placeholder="标题（可选）" value="'+it.title+'" oninput="queue['+i+'].title=this.value"><span class="rm" onclick="rmQ('+i+')">移除</span>';l.appendChild(d)})}
+function rmQ(i){queue.splice(i,1);renderQ()}
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;setTimeout(function(){t.className='toast'},2500)}
+async function doUpload(){if(!queue.length){toast('没有图片','err');return;}var fd=new FormData();queue.forEach(function(it){fd.append('images',it.file);fd.append('titles',it.title)});var r=await fetch('/api/upload',{method:'POST',body:fd});var j=await r.json();if(j.ok){toast('已上传 '+j.saved.length+' 张 ✅','ok');queue=[];renderQ();toggleUp();await load()}else{toast(j.error||'失败','err')}}
+
+load();
+</script>
+</body>
+</html>
