@@ -77,7 +77,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang 
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var IMG_PREFIX='/slides/',items=[{"id": 2, "filename": "20260721163037034669_t_02.jpg", "title": "马原第二讲", "sort_order": 1}, {"id": 3, "filename": "20260721163038191941_t_03.jpg", "title": "资本论导读", "sort_order": 2}],cur=0,queue=[];
+var IMG_PREFIX='/slides/',items=[{"id": 3, "filename": "20260721163038191941_t_03.jpg", "title": "资本论导读", "sort_order": 1}],cur=0,queue=[];
 
 async function load(){var r=await fetch('/api/list');items=await r.json();render()}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
